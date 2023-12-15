@@ -30,3 +30,15 @@ pub fn create_u32_from_line(line: &str) -> u32 {
 pub fn sum_calibration_values(input: Vec<u32>) -> u32 {
     input.iter().sum()
 }
+
+#[cfg(test)]
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn day_one_part_one_test() {
+        let input = prepare_input(INPUT);
+        assert_eq!(sum_calibration_values(input), 54708);
+    }
+}
