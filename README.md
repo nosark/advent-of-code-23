@@ -1,9 +1,9 @@
 WIP
 
-My solutions to this years advent of code.
+# My solutions to this years advent of code.
 - [ ] write up to every solution per day
 - [ ] optimize all solutions
-- [ ] 
+
 - [ ] Day 1
 - [ ] Day 2
 - [ ] Day 3
