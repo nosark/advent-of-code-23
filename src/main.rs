@@ -2,7 +2,10 @@ use aoc_23::day_one::{prepare_input, sum_calibration_values, INPUT};
 use std::collections::HashSet;
 fn main() {
     let test = "1abctwo3four";
-    let split_numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9","one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    let split_numbers = [
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six",
+        "seven", "eight", "nine",
+    ];
     let test_input = include_str!("../res/day_one_pt_two_test.txt");
     let data = prepare(INPUT);
     let sum = sum_nums(data);
@@ -16,7 +19,7 @@ fn convert_vec_to_num(vec: Vec<String>) -> u32 {
         num.push_str(&vec[0]);
     } else {
         num.push_str(&vec[0]);
-        num.push_str(&vec[vec.len()-1]);
+        num.push_str(&vec[vec.len() - 1]);
     }
     num.parse::<u32>().unwrap()
 }
@@ -44,12 +47,14 @@ fn string_as_u32(string: &str) -> &str {
 }
 
 fn str_as_u32(line: &str) -> u32 {
-    
-    let split_numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9","one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-    let words : HashSet<&str>= HashSet::from_iter(split_numbers.iter().cloned());
-    let mut numbers = Vec::new(); 
+    let split_numbers = [
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six",
+        "seven", "eight", "nine",
+    ];
+    let words: HashSet<&str> = HashSet::from_iter(split_numbers.iter().cloned());
+    let mut numbers = Vec::new();
     for i in 0..line.len() {
-        for j in i..line.len()+1 {
+        for j in i..line.len() + 1 {
             let word = &line[i..j];
             let word = word.chars().collect::<String>();
             if words.contains(word.as_str()) {
