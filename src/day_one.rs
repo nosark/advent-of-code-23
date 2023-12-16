@@ -1,11 +1,13 @@
 use std::collections::HashSet;
 pub const INPUT: &str = include_str!("../res/day_one.txt");
 
-pub fn prepare_input(input: &str) -> Vec<u32> {
-    input
-        .lines()
-        .map(create_u32_from_line)
-        .collect::<Vec<u32>>()
+const NUMBER_KEYWORDS: [&str; 18] = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six",
+    "seven", "eight", "nine",
+];
+
+pub fn prepare_input(input: &str, map_func: fn(&str) -> u32) -> Vec<u32> {
+    input.lines().map(map_func).collect::<Vec<u32>>()
 }
 
 pub fn create_u32_from_line(line: &str) -> u32 {
@@ -44,14 +46,6 @@ fn convert_vec_to_num(vec: Vec<String>) -> u32 {
     num.parse::<u32>().unwrap()
 }
 
-pub fn prepare_slow(input: &str) -> Vec<u32> {
-    input.lines().map(|line| str_as_u32(line)).collect()
-}
-
-pub fn prepare(input: &str) -> Vec<u32> {
-    input.lines().map(|line| faster_str_as_u32(line)).collect()
-}
-
 fn string_as_numeric(string: &str) -> &str {
     match string {
         "one" => "1",
@@ -67,12 +61,8 @@ fn string_as_numeric(string: &str) -> &str {
     }
 }
 
-fn str_as_u32(line: &str) -> u32 {
-    let split_numbers = [
-        "1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six",
-        "seven", "eight", "nine",
-    ];
-    let words: HashSet<&str> = HashSet::from_iter(split_numbers.iter().cloned());
+pub fn str_as_u32(line: &str) -> u32 {
+    let words: HashSet<&str> = HashSet::from_iter(NUMBER_KEYWORDS);
     let mut numbers = Vec::new();
     for i in 0..line.len() {
         for j in i..line.len() + 1 {
@@ -89,12 +79,8 @@ fn str_as_u32(line: &str) -> u32 {
     num
 }
 
-fn faster_str_as_u32(line: &str) -> u32 {
-    let split_numbers = [
-        "1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six",
-        "seven", "eight", "nine",
-    ];
-    let words: HashSet<&str> = HashSet::from_iter(split_numbers.iter().cloned());
+pub fn faster_str_as_u32(line: &str) -> u32 {
+    let words: HashSet<&str> = HashSet::from_iter(NUMBER_KEYWORDS);
     let mut numbers = Vec::new();
     let mut i = 0;
     let mut j = i + 1;
@@ -126,18 +112,18 @@ mod tests {
 
     #[test]
     fn day_one_part_one_test() {
-        let input = prepare_input(INPUT);
+        let input = prepare_input(INPUT, create_u32_from_line);
         assert_eq!(sum_calibration_values(input), 54708);
     }
 
     #[test]
     fn day_one_part_two_test() {
-        let input = prepare(INPUT);
+        let input = prepare_input(INPUT, str_as_u32);
         assert_eq!(sum_calibration_values(input), 54087);
     }
     #[test]
     fn day_one_part_two_slow_test() {
-        let input = prepare_slow(INPUT);
+        let input = prepare_input(INPUT, faster_str_as_u32);
         assert_eq!(sum_calibration_values(input), 54087);
     }
 }
