@@ -84,6 +84,7 @@ pub fn faster_str_as_u32(line: &str) -> u32 {
     let mut numbers = Vec::new();
     let mut i = 0;
     let mut j = i + 1;
+    let mut word_found = false;
     while i < line.len() {
         while j <= line.len() {
             let word = &line[i..j];
@@ -91,13 +92,23 @@ pub fn faster_str_as_u32(line: &str) -> u32 {
             if words.contains(word.as_str()) {
                 let new_word = string_as_numeric(word.as_str()).to_string();
                 numbers.push(new_word);
-                i = j - 1;
+                word_found = true;
+                if word.len() == 1 {
+                    i = j;
+                } else {
+                    i = j - 1;
+                }
                 break;
             } else {
                 j += 1;
             }
         }
-        i += 1;
+
+        if !word_found {
+            i += 1;
+        }
+
+        word_found = false;
         j = i + 1;
     }
 
@@ -109,7 +120,7 @@ pub fn faster_str_as_u32(line: &str) -> u32 {
 
 mod tests {
     use super::*;
-
+    const TEST_TWO_INPUT: &str = include_str!("../res/day_one_pt_two_test.txt");
     #[test]
     fn day_one_part_one_test() {
         let input = prepare_input(INPUT, create_u32_from_line);
@@ -117,13 +128,33 @@ mod tests {
     }
 
     #[test]
-    fn day_one_part_two_test() {
+    fn day_one_part_two_slow_test() {
         let input = prepare_input(INPUT, str_as_u32);
         assert_eq!(sum_calibration_values(input), 54087);
     }
     #[test]
-    fn day_one_part_two_slow_test() {
+    fn day_one_part_two_faster_test() {
         let input = prepare_input(INPUT, faster_str_as_u32);
         assert_eq!(sum_calibration_values(input), 54087);
+    }
+
+    #[test]
+    fn day_one_part_two_faster_test_2() {
+        let input = prepare_input(TEST_TWO_INPUT, faster_str_as_u32);
+        assert_eq!(sum_calibration_values(input), 281);
+    }
+
+    #[test]
+    fn day_one_part_two_faster_test_strings_overlap() {
+        let test_str = "4oneight";
+        let input = prepare_input(test_str, str_as_u32);
+        assert_eq!(sum_calibration_values(input), 48);
+    }
+
+    #[test]
+    fn day_one_part_two_faster_test_strings_overlap_2() {
+        let test_str = "twoneightwo";
+        let input = prepare_input(test_str, faster_str_as_u32);
+        assert_eq!(sum_calibration_values(input), 22);
     }
 }
